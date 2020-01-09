@@ -18,11 +18,11 @@ def main():
         conf = json.load(conf_file)["parameters"]
 
     ## Store credentials in a file
-    with open("/tmp/service.json", "w", encoding="utf-8") as service_file:
-        json.dump(conf["service_account"], service_file)
+    with open("./service.json", "w", encoding="utf-8") as service_file:
+        json.dump(conf["#service_account"], service_file)
 
     # OAuth2 credential info
-    key_file = "/tmp/service.json"
+    key_file = "./service.json"
 
     oauth2_client = oauth2.GoogleServiceAccountClient(
         key_file,
