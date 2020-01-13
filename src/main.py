@@ -40,11 +40,12 @@ def main():
 
     downloader = ad_manager_client.GetDataDownloader(version="v201911")
 
-    report_job = {"reportQuery": {
-        "dimensions": ["ADVERTISER_NAME", "COUNTRY_NAME"],
-        "columns": ["AD_SERVER_CLICKS"],
-        "dateRangeType": "LAST_3_MONTHS"
-    }
+    report_job = {
+        "reportQuery": {
+            "dimensions": ["ADVERTISER_NAME", "COUNTRY_NAME"],
+            "columns": ["AD_SERVER_CLICKS"],
+            "dateRangeType": "LAST_3_MONTHS"
+        }
     }
 
     job = downloader.WaitForReport(report_job)
@@ -55,6 +56,7 @@ def main():
             "CSV_DUMP",
             fid
         )
+
 
 if __name__ == "__main__":
     main()
