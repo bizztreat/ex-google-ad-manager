@@ -2,10 +2,12 @@
 import os
 import sys
 import json
-import gzip
 
+from subprocess import Popen
 from googleads import ad_manager
 from googleads import oauth2
+
+FILE_BUFFER = 16 * 1024
 
 
 def main():
@@ -41,53 +43,33 @@ def main():
     downloader = ad_manager_client.GetDataDownloader(version="v201911")
 
     # test report job
-    report_job = {
-        "reportQuery": {
-            "dimensions": ["ADVERTISER_NAME", "COUNTRY_NAME"],
-            "columns": ["AD_SERVER_CLICKS"],
-            "dateRangeType": "LAST_3_MONTHS"
-        }
-    }
+    report_job = conf["report_job"]
 
-    # columns and dnimensions from "Hlavni report pro API"
-    # report_job = {
-    #     "reportQuery": {
-    #         "dimensions": [
-    #             # "AD_EXCHANGE_DATE",
-    #             # "AD_EXCHANGE_DFP_AD_UNIT",
-    #             # "AD_EXCHANGE_BRANDING_TYPE",
-    #             "AD_EXCHANGE_URL"
-    #             # ,"AD_EXCHANGE_INVENTORY_SIZE"
-    #             # ,"DEVICE_CATEGORY_ID",
-    #             ],
-    #         "columns": [
-    #             # "AD_EXCHANGE_AD_REQUESTS", 
-    #             # "AD_EXCHANGE_MATCHED_REQUESTS",
-    #             # "AD_EXCHANGE_CLICKS",
-    #             # "AD_EXCHANGE_CTR",
-    #             # "AD_EXCHANGE_ESTIMATED_REVENUE",
-    #             "AD_EXCHANGE_IMPRESSIONS"
-    #             ],
-    #         "dateRangeType": "LAST_WEEK"
-    #     }
-    # }
-
+    print("Waiting for job completion...")
     job = downloader.WaitForReport(report_job)
 
     print("job: {}".format(job))
 
     output_path = "./output"
-    #if not os.path.exists(output_path):
-    os.makedirs(output_path, exist_ok=True)
-    print('ok')
+    if not os.path.exists(output_path):
+        os.makedirs(output_path)
 
-    with open("./output/output.csv.gz", "wb") as fid:
+    print("Job completed, downloading...")
+
+    # download
+    with open("./output/output.csv", "wb") as fid:
         downloader.DownloadReportToFile(
             job,
-            "CSV_DUMP",
-            fid
+            "CSV",
+            fid,
+            use_gzip_compression=False,
+            include_totals_row=False
         )
 
+    # Remove "Dimension." from header
+    #Popen("sed -i '1s/Dimension.//g' ./output/output.csv", shell=True)
+    # Remove "Column." from header
+    #Popen("sed -i '1s/Column.//g' ./output/output.csv", shell=True)
 
 if __name__ == "__main__":
     main()
