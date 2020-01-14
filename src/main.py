@@ -40,6 +40,7 @@ def main():
 
     downloader = ad_manager_client.GetDataDownloader(version="v201911")
 
+    # test report job
     report_job = {
         "reportQuery": {
             "dimensions": ["ADVERTISER_NAME", "COUNTRY_NAME"],
@@ -48,7 +49,37 @@ def main():
         }
     }
 
+    # columns and dnimensions from "Hlavni report pro API"
+    # report_job = {
+    #     "reportQuery": {
+    #         "dimensions": [
+    #             # "AD_EXCHANGE_DATE",
+    #             # "AD_EXCHANGE_DFP_AD_UNIT",
+    #             # "AD_EXCHANGE_BRANDING_TYPE",
+    #             "AD_EXCHANGE_URL"
+    #             # ,"AD_EXCHANGE_INVENTORY_SIZE"
+    #             # ,"DEVICE_CATEGORY_ID",
+    #             ],
+    #         "columns": [
+    #             # "AD_EXCHANGE_AD_REQUESTS", 
+    #             # "AD_EXCHANGE_MATCHED_REQUESTS",
+    #             # "AD_EXCHANGE_CLICKS",
+    #             # "AD_EXCHANGE_CTR",
+    #             # "AD_EXCHANGE_ESTIMATED_REVENUE",
+    #             "AD_EXCHANGE_IMPRESSIONS"
+    #             ],
+    #         "dateRangeType": "LAST_WEEK"
+    #     }
+    # }
+
     job = downloader.WaitForReport(report_job)
+
+    print("job: {}".format(job))
+
+    output_path = "./output"
+    #if not os.path.exists(output_path):
+    os.makedirs(output_path, exist_ok=True)
+    print('ok')
 
     with open("./output/output.csv.gz", "wb") as fid:
         downloader.DownloadReportToFile(
