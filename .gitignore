@@ -3,6 +3,7 @@ service.json
 output/
 .vscode/
 config2.json
+config.test.json
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

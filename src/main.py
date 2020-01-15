@@ -67,7 +67,7 @@ def main():
     logger.debug("Dumping service account")
     # Store credentials in a file
     with open("./service.json", "w", encoding="utf-8") as service_file:
-        json.dump(conf["#service_account"], service_file)
+        json.dump(json.loads(conf["#service_account"]), service_file)
 
     # OAuth2 credential info
     key_file = "./service.json"
@@ -93,7 +93,9 @@ def main():
     downloader = ad_manager_client.GetDataDownloader(version=API_VERSION)
 
     # test report job
-    report_job = conf["report_job"]
+    report_job = {
+        "reportQuery": conf["report_job"]
+    }
 
     if report_job["reportQuery"]["dateRangeType"] != "CUSTOM_DATE":
         if "startDate" in report_job["reportQuery"]:
