@@ -1,7 +1,2 @@
-src/config.json
-src/config2.json
-src/service.json
-config.json
-service.json
-.vscode/
-.ipynb_checkpoints/
+vendor
+.git
