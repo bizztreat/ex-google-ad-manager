@@ -1,2 +1,9 @@
+.vscode/
+src/config.json
+src/config.test/json
+src/config2.json
+src/service.json
+service.json
 vendor
 .git
+venv/
