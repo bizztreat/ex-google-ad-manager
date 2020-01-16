@@ -89,7 +89,8 @@ def main():
     ad_manager_client = ad_manager.AdManagerClient(
         oauth2_client,
         APPLICATION_NAME,
-        network_code=conf["network_code"]
+        network_code=conf["network_code"],
+        cache=ZeepServiceProxy.NO_CACHE
     )
 
     downloader = ad_manager_client.GetDataDownloader(version=API_VERSION)
