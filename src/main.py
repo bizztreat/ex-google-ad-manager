@@ -7,6 +7,7 @@ from logging import getLogger, basicConfig, DEBUG, INFO
 from datetime import datetime
 
 from googleads import ad_manager
+from googleads.common import ZeepServiceProxy
 from googleads import oauth2
 from slugify import slugify
 
@@ -24,7 +25,8 @@ def list_network_codes(oauth2_client):
     """
     ad_manager_client = ad_manager.AdManagerClient(
         oauth2_client,
-        APPLICATION_NAME
+        APPLICATION_NAME,
+        cache=ZeepServiceProxy.NO_CACHE
     )
 
     network_service = ad_manager_client.GetService(
