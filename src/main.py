@@ -2,6 +2,7 @@
 import os
 import sys
 import json
+import csv
 
 from logging import getLogger, basicConfig, DEBUG, INFO
 from datetime import datetime
@@ -131,13 +132,10 @@ def main():
     logger.info("Job completed, downloading")
 
     output_filename = slugify(conf["report_name"])
+    output_file =  os.path.join(output_path,"{}.csv".format(output_filename))
 
     # download
-    with open(
-            os.path.join(
-                output_path,
-                "{}.csv".format(output_filename)
-            ), "wb") as fid:
+    with open(output_file, "wb") as fid:
         downloader.DownloadReportToFile(
             job,
             "CSV",
@@ -146,5 +144,25 @@ def main():
             include_totals_row=False
         )
 
+    # add corresponding dates for "CUSTOM_DATE" date range
+    tmp_file = os.path.join(output_path,"{0}{1}.csv".format(output_filename,"_tmp"))
+
+    if report_job["reportQuery"]["dateRangeType"] == "CUSTOM_DATE":
+        with open(output_file, "r") as fid, open (tmp_file, "w") as tmpf:
+                report_reader = csv.reader(fid)
+                report_writer = csv.writer(tmpf, dialect=csv.unix_dialect)
+                for i, row in enumerate(report_reader):
+                    if i == 0:
+                        row.append("CUSTOM_DATE.from")
+                        row.append("CUSTOM_DATE.to")
+                        report_writer.writerow(row)
+                    else:
+                        row.append(datetime_from)
+                        row.append(datetime_to)
+                        report_writer.writerow(row)
+
+        os.replace(tmp_file, output_file)
+
+                
 if __name__ == "__main__":
     main()
