@@ -362,14 +362,14 @@
                     "title": "End Date (YYYY-MM-DD)",
                     "default": "",
                     "description": "Inclusive end date for report (only applicable when Date range type is set to CUSTOM_DATE)",
-                    "propertyOrder": 4
+                    "propertyOrder": 5
                 },
                 "startDate": {
                     "type": "string",
                     "title": "Start Date (YYYY-MM-DD)",
                     "default": "",
                     "description": "Inclusive start date for report (only applicable when Date range type is set to CUSTOM_DATE)",
-                    "propertyOrder": 5
+                    "propertyOrder": 4
                 },
                 "adUnitView": {
                     "enum": [
