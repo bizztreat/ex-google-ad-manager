@@ -144,24 +144,28 @@ def main():
             include_totals_row=False
         )
 
-    # add corresponding dates for "CUSTOM_DATE" date range
+    # add date range type, add corresponding dates for "CUSTOM_DATE" date range
     tmp_file = os.path.join(output_path,"{0}{1}.csv".format(output_filename,"_tmp"))
 
-    if report_job["reportQuery"]["dateRangeType"] == "CUSTOM_DATE":
-        with open(output_file, "r") as fid, open (tmp_file, "w") as tmpf:
-                report_reader = csv.reader(fid)
-                report_writer = csv.writer(tmpf, dialect=csv.unix_dialect)
-                for i, row in enumerate(report_reader):
-                    if i == 0:
-                        row.append("CUSTOM_DATE.from")
-                        row.append("CUSTOM_DATE.to")
-                        report_writer.writerow(row)
-                    else:
-                        row.append(datetime_from)
-                        row.append(datetime_to)
-                        report_writer.writerow(row)
-
-        os.replace(tmp_file, output_file)
+    with open(output_file, "r", encoding="utf-8") as fid, open(tmp_file, "w", encoding="utf-8") as tmpf:
+        report_reader = csv.reader(fid)
+        report_writer = csv.writer(tmpf, dialect=csv.unix_dialect)
+        for i, row in enumerate(report_reader):
+            if i == 0:
+                row.append("DATE_RANGE_TYPE")
+                row.append("CUSTOM_DATE.from")
+                row.append("CUSTOM_DATE.to")
+            else:
+                row.append(report_job["reportQuery"]["dateRangeType"])               
+                if report_job["reportQuery"]["dateRangeType"] == "CUSTOM_DATE":
+                    row.append(datetime_from)
+                    row.append(datetime_to)
+                else:
+                    row.append(None)
+                    row.append(None)
+            report_writer.writerow(row)
+            
+    os.replace(tmp_file, output_file)
 
                 
 if __name__ == "__main__":
