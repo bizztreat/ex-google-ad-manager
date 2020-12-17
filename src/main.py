@@ -14,7 +14,7 @@ from slugify import slugify
 
 FILE_BUFFER = 16 * 1024
 APPLICATION_NAME = "ex-bizztreat-google-ad-manager"
-API_VERSION = "v201911"
+API_VERSION = "v202011"
 OUTPUT_DIRECTORY = "/data/out/tables"
 
 
